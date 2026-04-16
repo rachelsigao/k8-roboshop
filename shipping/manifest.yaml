@@ -1,3 +1,4 @@
+# creating a config map to store environment variables for the shipping application to connect to cart and mysql services.
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -11,6 +12,8 @@ data:
   CART_ENDPOINT: "cart:8080"
   DB_HOST: "mysql"
 ---
+
+# Creating a deployment for shipping, and it will create a pod with shipping container. We set environment variables for the application to connect to cart and mysql services.
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -44,6 +47,8 @@ spec:
         - configMapRef:
             name: shipping
 ---
+
+# Creating a service to expose the shipping application on port 8080, and it will route traffic to the pods with matching labels.
 apiVersion: v1
 kind: Service
 metadata:

@@ -1,3 +1,4 @@
+# Creating a config map to store environment variables for the payment application to connect to cart, user and rabbitmq services.
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -14,10 +15,13 @@ data:
   USER_PORT: "8080"
   AMQP_HOST: "rabbitmq"
 ---
+
+# Creating a secret to store the default username and password for RabbitMQ. The values are base64 encoded, where "cm9ib3Nob3A=" is the base64 encoding of "roboshop" and "cm9ib3Nob3AxMjM=" is the base64 encoding of "roboshop123".
 apiVersion: v1
 kind: Secret
 metadata:
   name: payment
+  namespace: roboshop
   labels:
     component: payment
     project: roboshop
@@ -27,6 +31,8 @@ data:
   AMQP_USER: "cm9ib3Nob3A="
   AMQP_PASS: "cm9ib3Nob3AxMjM="
 ---
+
+# Creating a deployment for payment, and it will create a pod with payment container. We set environment variables for the application to connect to cart, user and rabbitmq services.
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -62,6 +68,8 @@ spec:
         - secretRef:
             name: payment
 ---
+
+# Creating a service to expose the payment application on port 8080, and it will route traffic to the pods with matching labels.
 apiVersion: v1
 kind: Service
 metadata:

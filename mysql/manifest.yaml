@@ -1,3 +1,4 @@
+# Creating a secret to store the MySQL root password. The value is base64 encoded, where "Um9ib1Nob3BAMQ==" is the base64 encoding of "RoboShop@1".
 apiVersion: v1
 kind: Secret
 metadata:
@@ -11,6 +12,8 @@ type: Opaque
 data:
   MYSQL_ROOT_PASSWORD: "Um9ib1Nob3BAMQ=="
 ---
+
+# Creating a deployment for MySQL, which will run a single replica of the MySQL container using a custom image rachelsigao/mysql:v1. The environment variable for the MySQL root password is sourced from the previously created secret.
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -44,6 +47,8 @@ spec:
         - secretRef:
             name: mysql
 ---
+
+# Creating a service to expose the MySQL database on port 3306, and it will route traffic to the pods with matching labels.
 apiVersion: v1
 kind: Service
 metadata:

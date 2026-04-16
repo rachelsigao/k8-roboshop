@@ -1,3 +1,4 @@
+# creating a config map to store environment variables for the cart application to connect to Redis and Catalogue services.
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -12,6 +13,8 @@ data:
   CATALOGUE_HOST: "catalogue"
   CATALOGUE_PORT: "8080"
 ---
+
+# Creating a deployment for cart, and it will create a pod with cart container. We set environment variables for the application to connect to Redis and Catalogue services.
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -45,6 +48,8 @@ spec:
         - configMapRef:
             name: cart
 ---
+
+# Creating a service to expose the cart application on port 8080, and it will route traffic to the pods with matching labels.
 apiVersion: v1
 kind: Service
 metadata:

@@ -1,3 +1,4 @@
+# Creating a secret to store the default username and password for RabbitMQ. The values are base64 encoded, where "cm9ib3Nob3A=" is the base64 encoding of "roboshop" and "cm9ib3Nob3AxMjM=" is the base64 encoding of "roboshop123".
 apiVersion: v1
 kind: Secret
 metadata:
@@ -12,6 +13,8 @@ data:
   RABBITMQ_DEFAULT_USER: "cm9ib3Nob3A="
   RABBITMQ_DEFAULT_PASS: "cm9ib3Nob3AxMjM="
 ---
+
+# Creating a deployment for the RabbitMQ message broker, which will run a single replica of the RabbitMQ container using the official RabbitMQ image. The environment variables for the default user and password are sourced from the previously created secret.
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -45,6 +48,8 @@ spec:
         - secretRef:
             name: rabbitmq
 ---
+
+# Creating a service to expose the rabbitmq application on port 5672, and it will route traffic to the pods with matching labels.
 apiVersion: v1
 kind: Service
 metadata:
