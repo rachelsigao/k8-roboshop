@@ -12,6 +12,8 @@ data:
   MONGO: "true"
   MONGO_URL: "mongodb://mongodb:27017/catalogue"
 
+---
+
 # Creating a deployment to set environment variables for the application to connect to MongoDBand creates a single replica of the catalogue service, useing the image rachelsigao/catalogue:v1.
 apiVersion: apps/v1
 kind: Deployment
@@ -45,6 +47,8 @@ spec:
         envFrom:
         - configMapRef:
             name: catalogue
+
+---
 
 # Creating a service to expose the catalogue application on port 8080, and it will route traffic to the pods with matching labels.
 apiVersion: v1
