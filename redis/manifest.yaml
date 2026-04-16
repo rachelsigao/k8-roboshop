@@ -1,3 +1,4 @@
+# Creating a deployment for redis, and it will create a pod with redis container. We use the default configuration of redis, so we don't need to mount any config file or set any environment variable.
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -28,6 +29,8 @@ spec:
       - name: redis
         image: redis:7.0
 ---
+
+# Create a service to expose redis deployment on port 6379, and it will route traffic to the pods with matching labels.
 apiVersion: v1
 kind: Service
 metadata:

@@ -1,3 +1,4 @@
+# creating a config map to store environment variables for the user application to connect to MongoDB and Redis.
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -12,6 +13,8 @@ data:
   REDIS_URL: "redis://redis:6379"
   MONGO: "true"
 ---
+
+# Creating a deployment to set environment variables for the application to connect to MongoDB and Redis, and creates a single replica of the user service, using the image rachelsigao/user:v1.
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -45,6 +48,8 @@ spec:
         - configMapRef:
             name: user
 ---
+
+# Creating a service to expose the user application on port 8080, and it will route traffic to the pods with matching labels.
 apiVersion: v1
 kind: Service
 metadata:
