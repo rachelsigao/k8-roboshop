@@ -72,15 +72,16 @@ data:
 
         }
     }
----
 
 # Creating a deployment for frontend. We mount the nginx.conf file from the ConfigMap as a volume to the container, allowing frontend to use custom Nginx configuration.
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: frontend
   namespace: roboshop
   # deployment labels
+
   labels:
     component: frontend
     project: roboshop
@@ -88,12 +89,14 @@ metadata:
 spec:
   replicas: 1
   # These are the labels replica set use to create pod replicas, this should match pod labels
+
   selector:
     matchLabels:
       component: frontend
       project: roboshop
       tier: web
   # This is pod definition
+
   template:
     metadata:
       labels:
@@ -102,13 +105,13 @@ spec:
         tier: web
     spec:
       containers:
-      - name: frontend
-        image: rachelsigao/frontend:v1
-        volumeMounts:
-        - name: nginx-conf
-          mountPath: /etc/nginx/nginx.conf
-          subPath: nginx.conf
-          readOnly: true
+        - name: frontend
+          image: rachelsigao/frontend:v1
+          volumeMounts:
+            - name: nginx-conf
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
+              readOnly: true
       volumes:
         - name: nginx-conf
           configMap:
@@ -116,9 +119,9 @@ spec:
             items:
               - key: nginx.conf
                 path: nginx.conf
----
 
 # Creating a service to expose the frontend application on port 80, and it will route traffic to the pods with matching labels.
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -134,12 +137,12 @@ spec:
     project: roboshop
     tier: web
   ports:
-  - protocol: TCP
-    port: 80 # service port
-    targetPort: 8080 # container port
----
+    - protocol: TCP
+      port: 80 # service port
+      targetPort: 8080 # container port
 
 # Creating a TargetGroupBinding to associate the frontend service with an AWS Elastic Load Balancer target group, allowing external traffic to reach the frontend application through the load balancer. The target group ARN is specified in the manifest, and the service port is set to 80, which matches the port defined in the frontend service.
+---
 apiVersion: elbv2.k8s.aws/v1beta1
 kind: TargetGroupBinding
 metadata:
